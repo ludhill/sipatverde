@@ -1,92 +1,192 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rifa Solidária CIPAT - Equipe Verde</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rifa Solidária CIPAT 2026 - Equipe Verde</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'grafite': '#22282A',
+            'grafite-card': '#2E3538',
+            'verde-limao': '#59D93D',
+            'verde-limao-hover': '#6DFF4F',
+            'branco-puro': '#FFFFFF',
+            'cinza-texto': '#E0E0E0',
+          },
+          fontFamily: {
+            'poppins': ['Poppins', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .numero {
+      @apply flex items-center justify-center w-12 h-12 rounded-full font-bold text-white text-sm cursor-pointer transition-all duration-200;
+    }
+    .numero.disponivel { background-color: #59D93D; }
+    .numero.disponivel:hover { transform: scale(1.1); }
+    .numero.reservado { background-color: #FFC107; cursor: not-allowed; opacity: 0.7; }
+    .numero.vendido { background-color: #6C757D; cursor: not-allowed; opacity: 0.6; }
+    .numero.selecionado { background-color: #007BFF; transform: scale(1.1); box-shadow: 0 0 10px #007BFF; border: 2px solid white; }
+
+    .modal-container { @apply hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50; }
+    .modal-content { @apply bg-white text-black rounded-2xl p-8 shadow-2xl max-w-md w-[90%] relative; }
+    .modal-close { @apply absolute top-3 right-4 text-3xl font-bold text-gray-500 cursor-pointer hover:text-gray-700; }
+  </style>
 </head>
-<body>
 
-    <header>
-        <h1>Rifa Solidária - Equipe Verde</h1>
-        <p>Doe 2kg de alimento ou R$ 10,00 e concorra a um dia de lazer no Espaço Camping - Nísia Floresta, para até 16 pessoas!</p>
-        <p>(Sorteio dia 16/11/2025)</p>
+<body class="font-poppins bg-grafite text-cinza-texto antialiased">
+
+  <!-- Hero -->
+  <section class="hero-image bg-[url('https://images.unsplash.com/photo-1596400056563-5d8b7efdc3e2?w=1600')] bg-cover bg-center py-24 text-center text-branco-puro">
+    <div class="container mx-auto px-4">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">Rifa Solidária CIPAT 2026</h1>
+      <p class="text-lg md:text-xl mb-6">Participe e apoie ações solidárias da nossa equipe! 💚</p>
+      <p class="text-md text-cinza-texto mb-8">(Sorteio: 16/11/2026)</p>
+      <a href="#grelha-numeros" class="bg-verde-limao hover:bg-verde-limao-hover text-grafite font-bold py-3 px-8 rounded-full inline-block">
+        Participar Agora
+      </a>
+    </div>
+  </section>
+
+  <!-- Contador Principal -->
+  <section class="py-10 bg-grafite-card text-center">
+    <h3 class="text-xl font-semibold mb-3">Tempo restante para o sorteio:</h3>
+    <div id="contador" class="text-3xl font-mono text-verde-limao font-bold">
+      <span id="dias">00</span>d
+      <span id="horas">00</span>h
+      <span id="minutos">00</span>m
+      <span id="segundos">00</span>s
+    </div>
+  </section>
+
+  <!-- Grelha -->
+  <main class="py-12 container mx-auto px-4">
+    <section id="escolha-numeros" class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-branco-puro mb-2">1️⃣ Escolha seus números da sorte</h2>
+      <p class="text-cinza-texto mb-6">(Você pode selecionar mais de um!)</p>
+      <div id="grelha-numeros" class="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto">
+        <div class="loader text-cinza-texto">Carregando números...</div>
+      </div>
+    </section>
+
+    <!-- Formulário -->
+    <section id="preencher-dados" class="bg-grafite-card rounded-2xl p-8 shadow-lg max-w-3xl mx-auto">
+      <h3 class="text-2xl font-semibold text-branco-puro mb-6">2️⃣ Preencha seus dados</h3>
+      <form id="form-checkout" class="flex flex-col gap-4">
+        <div>
+          <label for="nome" class="block mb-2 font-semibold text-branco-puro">Seu Nome Completo:</label>
+          <input id="nome" type="text" required class="w-full px-4 py-3 rounded-md bg-grafite border border-gray-700 text-branco-puro focus:outline-none focus:border-verde-limao">
+        </div>
+
+        <div>
+          <label for="whatsapp" class="block mb-2 font-semibold text-branco-puro">Seu WhatsApp (com DDD):</label>
+          <input id="whatsapp" type="tel" placeholder="Ex: 84999998888" required class="w-full px-4 py-3 rounded-md bg-grafite border border-gray-700 text-branco-puro focus:outline-none focus:border-verde-limao">
+        </div>
+
+        <div id="cross-sell" class="flex items-start bg-grafite p-4 rounded-md border border-gray-700">
+          <input id="chk-cross-sell" type="checkbox" class="mt-1 mr-3 accent-verde-limao">
+          <label for="chk-cross-sell" class="text-cinza-texto text-sm leading-snug">
+            💚 Sim! Quero a oferta especial: <span class="font-bold text-verde-limao">3 números por R$ 25,00</span>!
+            (Selecione 3 números na grelha)
+          </label>
+        </div>
+
+        <button type="submit" id="btn-reservar" class="mt-4 bg-verde-limao hover:bg-verde-limao-hover text-grafite font-bold py-3 rounded-full transition-all">
+          Reservar e Gerar Recibo
+        </button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div id="modal-recibo"
+     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
+     style="display:none;">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 w-11/12 max-w-lg relative">
+        <span class="modal-close absolute top-3 right-4 text-3xl font-bold text-gray-400 cursor-pointer hover:text-gray-600">&times;</span>
+        <h2 class="text-2xl font-bold text-green-700 mb-2">Reserva Iniciada!</h2>
+        <p class="text-gray-700 mb-4">Seus números estão guardados por 10 minutos. Pague agora para confirmar!</p>
         
-        <div id="contador-container">
-            <h3>Tempo restante para o sorteio:</h3>
-            <div id="contador">
-                <span id="dias">00</span>d
-                <span id="horas">00</span>h
-                <span id="minutos">00</span>m
-                <span id="segundos">00</span>s
-            </div>
+        <div id="recibo-sumario" class="space-y-2">
+        <h3 class="text-lg font-semibold text-gray-800">Resumo da Reserva:</h3>
+        <p><strong>Nome:</strong> <span id="recibo-nome" class="text-gray-600"></span></p>
+        <p><strong>WhatsApp:</strong> <span id="recibo-whatsapp" class="text-gray-600"></span></p>
+        <p><strong>Números:</strong> <span id="recibo-numeros" class="text-gray-600"></span></p>
+        <p><strong>Valor Total:</strong> <span id="recibo-valor" class="text-gray-600"></span></p>
+        <hr class="my-3">
+        
+        <div id="contador-oferta-container"
+            class="text-center text-red-600 font-bold bg-red-50 p-2 rounded-lg">
+            Sua oferta expira em: 
+            <span id="contador-oferta" class="font-mono text-lg">05:00</span>
         </div>
-        </header>
-
-    <main>
-        <section id="escolha-numeros">
-            <h3>1. Escolha seu(s) número(s) da sorte:</h3>
-            <p>(Você pode selecionar mais de um!)</p>
-            <div id="grelha-numeros">
-                <div class="loader">Carregando números...</div>
-            </div>
-        </section>
-
-        <section id="preencher-dados">
-            <h3>2. Preencha seus dados para a reserva:</h3>
-            <form id="form-checkout">
-                <label for="nome">Seu Nome Completo:</label>
-                <input type="text" id="nome" required>
-                
-                <label for="whatsapp">Seu WhatsApp (com DDD):</label>
-                <input type="tel" id="whatsapp" placeholder="Ex: 84999998888" required>
-
-                <div id="cross-sell">
-                    <input type="checkbox" id="chk-cross-sell">
-                    <label for="chk-cross-sell">
-                        Sim! Quero a oferta: 3 números por R$ 25,00! 
-                        (Selecione 3 números na grelha)
-                    </label>
-                </div>
-
-                <button type="submit" id="btn-reservar">
-                    Reservar e Gerar Recibo
-                </button>
-            </form>
-        </section>
-    </main>
-
-    <div id="modal-recibo" class="modal-container">
-        <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <h2>Reserva Iniciada!</h2>
-            <p>Seus números estão guardados por 10 minutos. Pague agora para confirmar!</p>
-            
-            <div id="recibo-sumario">
-                <h3>Resumo da Reserva:</h3>
-                <p><strong>Nome:</strong> <span id="recibo-nome"></span></p>
-                <p><strong>WhatsApp:</strong> <span id="recibo-whatsapp"></span></p>
-                <p><strong>Números:</strong> <span id="recibo-numeros"></span></p>
-                <p><strong>Valor Total:</strong> <span id="recibo-valor"></span></p>
-                <hr>
-
-                <div id="contador-oferta-container">
-                    Sua oferta expira em: 
-                    <span id="contador-oferta">05:00</span>
-                </div>
-                <p><strong>PIX para Doação:</strong> (84) 98767-7603</p>
-            </div>
-            
-            <a id="btn-whatsapp" class="button-link" href="#" target="_blank">
-                Pagar e Enviar Comprovante no WhatsApp
-            </a>
+        <p class="mt-2"><strong>PIX para Doação:</strong> <span class="text-green-600 font-semibold">(84) 98767-7603</span></p>
         </div>
+        
+        <a id="btn-whatsapp"
+        href="#"
+        target="_blank"
+        class="block mt-6 bg-green-500 hover:bg-green-600 text-white font-bold text-center py-3 rounded-lg shadow-md transition duration-200">
+        💬 Pagar e Enviar Comprovante no WhatsApp
+        </a>
+    </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Footer -->
+  <footer class="bg-grafite-card text-center py-8 mt-12">
+    <h3 class="text-lg font-semibold text-branco-puro">Equipe Verde - CIPAT 2026</h3>
+    <p class="text-cinza-texto mt-2">Solidariedade que transforma vidas 💚</p>
+    <p class="text-sm text-gray-500 mt-4">© 2026 Todos os direitos reservados</p>
+  </footer>
+
+  <!-- Script (comportamento básico) -->
+  <script>
+    // Modal toggle
+    const modal = document.getElementById('modal-recibo');
+    const closeModal = document.querySelector('.modal-close');
+    closeModal.addEventListener('click', () => modal.classList.add('hidden'));
+    window.addEventListener('click', e => { if (e.target === modal) modal.classList.add('hidden'); });
+
+    // Simulação de preenchimento do recibo
+    document.getElementById('form-checkout').addEventListener('submit', e => {
+      e.preventDefault();
+      document.getElementById('recibo-nome').textContent = document.getElementById('nome').value;
+      document.getElementById('recibo-whatsapp').textContent = document.getElementById('whatsapp').value;
+      document.getElementById('recibo-numeros').textContent = '10, 11, 12'; // Exemplo
+      document.getElementById('recibo-valor').textContent = 'R$ 30,00';
+      document.getElementById('btn-whatsapp').href = `https://wa.me/5584987677603?text=Olá! Sou ${document.getElementById('nome').value}, reservei os números 10, 11, 12 e desejo enviar o comprovante.`;
+      modal.classList.remove('hidden');
+    });
+
+    // Contador exemplo (sorteio)
+    const end = new Date("2026-11-16T00:00:00").getTime();
+    setInterval(() => {
+      const now = new Date().getTime();
+      const diff = end - now;
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((diff % (1000 * 60)) / 1000);
+      document.getElementById("dias").textContent = d;
+      document.getElementById("horas").textContent = h;
+      document.getElementById("minutos").textContent = m;
+      document.getElementById("segundos").textContent = s;
+    }, 1000);
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <script src="script.js"></script>
-
 </body>
 </html>
