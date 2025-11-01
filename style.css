@@ -1,3 +1,23 @@
+/* --- ESTILOS GERAIS --- */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+header {
+    text-align: center;
+    padding: 20px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+main {
+    padding: 10px;
+}
+
+/* --- GRELHA DE NÚMEROS (O que faltava antes) --- */
 #grelha-numeros {
     display: flex;
     flex-wrap: wrap;
@@ -13,18 +33,19 @@
 }
 
 .numero {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%; /* <-- Esta é a linha que os deixa redondos! */
+    border-radius: 50%; /* <-- Deixa os números redondos */
     font-weight: bold;
     color: white;
+    font-size: 0.9em;
     transition: transform 0.2s;
 }
 
-/* Os 3 status dos números */
+/* Os 4 status dos números */
 .numero.disponivel {
     background-color: #28a745; /* Verde */
     cursor: pointer;
@@ -45,8 +66,16 @@
     opacity: 0.5;
 }
 
+.numero.selecionado {
+    background-color: #007bff; /* Azul */
+    transform: scale(1.1);
+    box-shadow: 0 0 10px #007bff;
+    border: 2px solid white;
+}
+
+/* --- CONTADOR PRINCIPAL (Item 7) --- */
 #contador-container {
-    background-color: #28a745; /* Verde (ou a cor da sua equipe) */
+    background-color: #28a745;
     color: white;
     padding: 10px 20px;
     border-radius: 8px;
@@ -70,18 +99,14 @@
     padding: 0 5px;
 }
 
-.numero.selecionado {
-    background-color: #007bff; /* Azul */
-    transform: scale(1.1);
-    box-shadow: 0 0 10px #007bff;
-}
- 
+/* --- FORMULÁRIO (Cross-sell) --- */
 #preencher-dados {
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
     background-color: #f4f4f4;
     border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 #form-checkout {
@@ -90,11 +115,17 @@
     gap: 15px;
 }
 
+#form-checkout label {
+    font-weight: bold;
+    margin-bottom: -10px;
+}
+
 #form-checkout input[type="text"],
 #form-checkout input[type="tel"] {
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 1em;
 }
 
 #btn-reservar {
@@ -112,10 +143,50 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    background-color: #e6f7ea;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* --- MODAL (POP-UP) E RECIBO --- */
+.modal-container {
+    display: none; /* <-- ISSO É O QUE ESCONDE O MODAL */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 25px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+}
+
+#recibo-sumario p {
+    font-size: 1.1em;
+    line-height: 1.6;
 }
 
 .button-link {
-    display: inline-block;
+    display: block; /* Ocupa a linha inteira */
     padding: 15px;
     margin-top: 20px;
     font-size: 1.1em;
@@ -127,12 +198,16 @@
     text-align: center;
 }
 
+/* --- CONTADOR DA OFERTA (Item 8) --- */
 #contador-oferta-container {
     text-align: center;
     font-size: 1.1em;
     font-weight: bold;
-    color: #d9534f; /* Um tom de vermelho para urgência */
-    margin-top: 15px;
+    color: #d9534f; /* Vermelho */
+    margin: 15px 0;
+    padding: 10px;
+    background-color: #fdf7f7;
+    border-radius: 5px;
 }
 
 #contador-oferta {
