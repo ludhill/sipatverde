@@ -1,70 +1,94 @@
- 
-#grelha-numeros {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-    max-width: 800px;
+#contador-container {
+    background-color: #28a745; /* Verde (ou a cor da sua equipe) */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 500px;
     margin: 20px auto;
 }
 
-.numero {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
+#contador-container h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.1em;
+}
+
+#contador {
+    font-size: 2.5em;
     font-weight: bold;
-    color: white;
-    transition: transform 0.2s;
-} 
-.numero.disponivel {
-    background-color: #28a745; /* Verde */
-    cursor: pointer;
+    font-family: 'Courier New', Courier, monospace;
 }
-.numero.disponivel:hover {
+
+#contador span {
+    padding: 0 5px;
+}
+
+.numero.selecionado {
+    background-color: #007bff; /* Azul */
     transform: scale(1.1);
-}
-
-.numero.reservado {
-    background-color: #ffc107; /* Amarelo */
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
-.numero.vendido {
-    background-color: #6c757d; /* Cinza */
-    cursor: not-allowed;
-    opacity: 0.5;
+    box-shadow: 0 0 10px #007bff;
 }
  
-.modal-container {
-    display: none; /* Começa escondido */
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.6);
+#preencher-dados {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
 }
 
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-    border-radius: 10px;
-} 
+#form-checkout {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
 
-.modal-close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
+#form-checkout input[type="text"],
+#form-checkout input[type="tel"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#btn-reservar {
+    padding: 15px;
+    font-size: 1.1em;
     font-weight: bold;
+    color: white;
+    background-color: #28a745; /* Verde */
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
+}
+
+#cross-sell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.button-link {
+    display: inline-block;
+    padding: 15px;
+    margin-top: 20px;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: white !important;
+    background-color: #25D366; /* Cor do WhatsApp */
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+}
+
+#contador-oferta-container {
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #d9534f; /* Um tom de vermelho para urgência */
+    margin-top: 15px;
+}
+
+#contador-oferta {
+    font-size: 1.3em;
+    font-family: 'Courier New', Courier, monospace;
 }

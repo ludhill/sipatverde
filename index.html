@@ -12,32 +12,75 @@
         <h1>Rifa Solidária - Equipe Verde</h1>
         <p>Doe 2kg de alimento ou R$ 10,00 e concorra a um dia de lazer no Espaço Camping - Nísia Floresta, para até 16 pessoas!</p>
         <p>(Sorteio dia 16/11/2025)</p>
-    </header>
+        
+        <div id="contador-container">
+            <h3>Tempo restante para o sorteio:</h3>
+            <div id="contador">
+                <span id="dias">00</span>d
+                <span id="horas">00</span>h
+                <span id="minutos">00</span>m
+                <span id="segundos">00</span>s
+            </div>
+        </div>
+        </header>
 
     <main>
-        <h3>Escolha seu número da sorte:</h3>
-        <div id="grelha-numeros">
-            <div class="loader">Carregando números...</div>
-        </div>
-    </main>
+        <section id="escolha-numeros">
+            <h3>1. Escolha seu(s) número(s) da sorte:</h3>
+            <p>(Você pode selecionar mais de um!)</p>
+            <div id="grelha-numeros">
+                <div class="loader">Carregando números...</div>
+            </div>
+        </section>
 
-    <div id="modal-reserva" class="modal-container">
-        <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <h2>Número <span id="numero-reservado"></span> Reservado!</h2>
-            <p>Seu número está guardado por 10 minutos. Preencha abaixo para continuar:</p>
-            
+        <section id="preencher-dados">
+            <h3>2. Preencha seus dados para a reserva:</h3>
             <form id="form-checkout">
                 <label for="nome">Seu Nome Completo:</label>
                 <input type="text" id="nome" required>
                 
                 <label for="whatsapp">Seu WhatsApp (com DDD):</label>
                 <input type="tel" id="whatsapp" placeholder="Ex: 84999998888" required>
-                
-                <button type="submit" id="btn-whatsapp">
-                    Pagar e Enviar Comprovante no WhatsApp
+
+                <div id="cross-sell">
+                    <input type="checkbox" id="chk-cross-sell">
+                    <label for="chk-cross-sell">
+                        Sim! Quero a oferta: 3 números por R$ 25,00! 
+                        (Selecione 3 números na grelha)
+                    </label>
+                </div>
+
+                <button type="submit" id="btn-reservar">
+                    Reservar e Gerar Recibo
                 </button>
             </form>
+        </section>
+    </main>
+
+    <div id="modal-recibo" class="modal-container">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2>Reserva Iniciada!</h2>
+            <p>Seus números estão guardados por 10 minutos. Pague agora para confirmar!</p>
+            
+            <div id="recibo-sumario">
+                <h3>Resumo da Reserva:</h3>
+                <p><strong>Nome:</strong> <span id="recibo-nome"></span></p>
+                <p><strong>WhatsApp:</strong> <span id="recibo-whatsapp"></span></p>
+                <p><strong>Números:</strong> <span id="recibo-numeros"></span></p>
+                <p><strong>Valor Total:</strong> <span id="recibo-valor"></span></p>
+                <hr>
+
+                <div id="contador-oferta-container">
+                    Sua oferta expira em: 
+                    <span id="contador-oferta">05:00</span>
+                </div>
+                <p><strong>PIX para Doação:</strong> (84) 98767-7603</p>
+            </div>
+            
+            <a id="btn-whatsapp" class="button-link" href="#" target="_blank">
+                Pagar e Enviar Comprovante no WhatsApp
+            </a>
         </div>
     </div>
 
