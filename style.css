@@ -1,3 +1,50 @@
+#grelha-numeros {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.loader {
+    font-size: 1.2em;
+    color: #555;
+}
+
+.numero {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; /* <-- Esta é a linha que os deixa redondos! */
+    font-weight: bold;
+    color: white;
+    transition: transform 0.2s;
+}
+
+/* Os 3 status dos números */
+.numero.disponivel {
+    background-color: #28a745; /* Verde */
+    cursor: pointer;
+}
+.numero.disponivel:hover {
+    transform: scale(1.1);
+}
+
+.numero.reservado {
+    background-color: #ffc107; /* Amarelo */
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.numero.vendido {
+    background-color: #6c757d; /* Cinza */
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
 #contador-container {
     background-color: #28a745; /* Verde (ou a cor da sua equipe) */
     color: white;
