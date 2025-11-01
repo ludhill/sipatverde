@@ -75,12 +75,12 @@ formCheckout.addEventListener('submit', async (e) => {
 
     // 1. Validar o carrinho
     if (shoppingCart.length === 0) {
-        alert('Por favor, selecione pelo menos um número da grelha!');
+        alert('Por favor, selecione pelo menos um número da grade!');
         return;
     }
  
     const nome = document.getElementById('nome').value;
-    const whatsapp = document.getElementById('whatsapp').value;
+    const whatsapp = document.getElementById('whatsapp').value; 
     const isCrossSellActive = chkCrossSell.checked;
  
     const numerosString = shoppingCart.join(','); 
