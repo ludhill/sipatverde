@@ -24,7 +24,10 @@ const btnWhatsapp = document.getElementById('btn-whatsapp');
  
 let shoppingCart = []; 
 async function carregarGrelha() {
-    const { data, error } = await supabaseClient.from('numeros').select().order('id', { ascending: true });
+    //const { data, error } = await supabaseClient.from('numeros').select().order('id', { ascending: true });
+ // Nova Linha (com o filtro):
+    const { data, error } = await supabaseClient.from('numeros').select().gte('id', 280).lte('id', 300).order('id', { ascending: true });
+
     if (error) {
         console.error('Erro ao carregar números:', error);
         grelha.innerHTML = '<p>Erro ao carregar números. Tente novamente.</p>';
