@@ -1,0 +1,70 @@
+ 
+#grelha-numeros {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.numero {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: bold;
+    color: white;
+    transition: transform 0.2s;
+} 
+.numero.disponivel {
+    background-color: #28a745; /* Verde */
+    cursor: pointer;
+}
+.numero.disponivel:hover {
+    transform: scale(1.1);
+}
+
+.numero.reservado {
+    background-color: #ffc107; /* Amarelo */
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.numero.vendido {
+    background-color: #6c757d; /* Cinza */
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+ 
+.modal-container {
+    display: none; /* Começa escondido */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+} 
+
+.modal-close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
