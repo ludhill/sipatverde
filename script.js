@@ -28,7 +28,7 @@ let ofertaIntervalo;
 
 // --- PASSO 4: FUNÇÃO PARA DESENHAR A GRELHA ---
 async function carregarGrelha() {
-    const { data, error } = await supabaseClient.from('numeros').select('id, status, Nome').gte('id', 280).lte('id', 300).order('id', { ascending: true });
+    const { data, error } = await supabaseClient.from('numeros').select('id, status, Nome').gte('id', 1).lte('id', 100).order('id', { ascending: true });
     
     if (error) {
         console.error('Erro ao carregar números:', error);
