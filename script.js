@@ -149,8 +149,8 @@ function clearCart() {
 }
 
 // --- PASSO 9: FUNÇÕES DOS CONTADORES ---
-function iniciarContador() {
-    const dataSorteio = new Date("2025-11-16T18:00:00").getTime();
+function iniciarContador() { 
+    const dataSorteio = new Date(2025, 10, 16, 18, 0, 0).getTime(); // 2025, Mês 10 (Novembro), Dia 16, 18:00
     const contadorDiv = document.getElementById('contador');
     const grelhaContainer = document.getElementById('escolha-numeros');
     const dadosContainer = document.getElementById('preencher-dados');
