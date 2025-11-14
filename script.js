@@ -1,7 +1,7 @@
 // --- PASSO 1: CONFIGURAÇÃO ---
 const SUPABASE_URL = 'https://liqzrrmjcdkkcxjqsczc.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxpcXpycm1qY2Rra2N4anFzY3pjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5NTg3NDEsImV4cCI6MjA3NzUzNDc0MX0.DX1wqfEtzscXS7KzUDv140hE4CioOO7NdpwQTp-2hrs';
-const WHATSAPP_NUMBER = '5584912345678'; // Número do admin
+const WHATSAPP_NUMBER = '5584987677603'; // Número do admin
 
 // Constantes de Preço
 const PRICE_PER_NUMBER = 10;
