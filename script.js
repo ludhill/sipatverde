@@ -2,7 +2,8 @@
 const SUPABASE_URL = 'https://liqzrrmjcdkkcxjqsczc.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxpcXpycm1qY2Rra2N4anFzY3pjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5NTg3NDEsImV4cCI6MjA3NzUzNDc0MX0.DX1wqfEtzscXS7KzUDv140hE4CioOO7NdpwQTp-2hrs';
 const N8N_RESERVAR_URL = 'https://ldenner.app.n8n.cloud/webhook/ad7c799e-0db1-490f-afe3-ec921f660e82';
-const WHATSAPP_NUMBER = '5584987677603';
+//const WHATSAPP_NUMBER = '5584987677603';
+const WHATSAPP_NUMBER = '5584987858902';
  
 const PRICE_PER_NUMBER = 10;
 const CROSS_SELL_COUNT = 3;
@@ -25,6 +26,9 @@ const btnWhatsapp = document.getElementById('btn-whatsapp');
 let shoppingCart = []; 
 async function carregarGrelha() {
     const { data, error } = await supabaseClient.from('numeros').select().order('id', { ascending: true });
+ // Nova Linha (com o filtro):
+    //const { data, error } = await supabaseClient.from('numeros').select().gte('id', 280).lte('id', 300).order('id', { ascending: true });
+
     if (error) {
         console.error('Erro ao carregar números:', error);
         grelha.innerHTML = '<p>Erro ao carregar números. Tente novamente.</p>';
