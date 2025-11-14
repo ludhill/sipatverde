@@ -1,35 +1,30 @@
-// --- PASSO 1: CONFIGURAÇÃO ---
+ 
 const SUPABASE_URL = 'https://liqzrrmjcdkkcxjqsczc.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxpcXpycm1qY2Rra2N4anFzY3pjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5NTg3NDEsImV4cCI6MjA3NzUzNDc0MX0.DX1wqfEtzscXS7KzUDv140hE4CioOO7NdpwQTp-2hrs';
-const WHATSAPP_NUMBER = '5584912345678'; // Número do admin
-
-// Constantes de Preço
+const N8N_RESERVAR_URL = 'https://ldenner.app.n8n.cloud/webhook/ad7c799e-0db1-490f-afe3-ec921f660e82';
+const WHATSAPP_NUMBER = '5584987677603';
+ 
 const PRICE_PER_NUMBER = 10;
 const CROSS_SELL_COUNT = 3;
 const CROSS_SELL_PRICE = 25;
-
-// --- PASSO 2: CONECTAR AO SUPABASE ---
+ 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// --- PASSO 3: PEGAR OS ELEMENTOS DO HTML ---
+ 
 const grelha = document.getElementById('grelha-numeros');
 const modalRecibo = document.getElementById('modal-recibo');
 const modalClose = document.getElementsByClassName('modal-close')[0];
 const formCheckout = document.getElementById('form-checkout');
 const chkCrossSell = document.getElementById('chk-cross-sell');
+ 
 const reciboNome = document.getElementById('recibo-nome');
 const reciboWhatsapp = document.getElementById('recibo-whatsapp');
 const reciboNumeros = document.getElementById('recibo-numeros');
 const reciboValor = document.getElementById('recibo-valor');
 const btnWhatsapp = document.getElementById('btn-whatsapp');
-
+ 
 let shoppingCart = []; 
-let ofertaIntervalo; 
-
-// --- PASSO 4: FUNÇÃO PARA DESENHAR A GRELHA ---
 async function carregarGrelha() {
-    const { data, error } = await supabaseClient.from('numeros').select('id, status, Nome').gte('id', 280).lte('id', 300).order('id', { ascending: true });
-    
+    const { data, error } = await supabaseClient.from('numeros').select().order('id', { ascending: true });
     if (error) {
         console.error('Erro ao carregar números:', error);
         grelha.innerHTML = '<p>Erro ao carregar números. Tente novamente.</p>';
@@ -41,22 +36,9 @@ async function carregarGrelha() {
         divNumero.className = `numero ${numero.status}`;
         divNumero.textContent = numero.id;
         divNumero.dataset.id = numero.id;
-
-        // *** CORREÇÃO AQUI (Limpador de Nome) ***
-        if (numero.status === 'vendido' && numero.Nome) { 
-            const nomeCompleto = numero.Nome; // "Fulano de Tal 99991234"
-            const splitIndex = nomeCompleto.lastIndexOf(' '); // Encontra o último espaço
-            
-            // Pega o nome (se achou um espaço) ou usa o texto inteiro (se não achou)
-            const nomeApenas = splitIndex > -1 ? nomeCompleto.substring(0, splitIndex) : nomeCompleto; 
-            
-            divNumero.title = `Comprado por: ${nomeApenas}`; // Mostra só "Fulano de Tal"
-        }
         grelha.appendChild(divNumero);
     }
 } 
-
-// --- PASSO 5: FUNÇÃO PARA OUVIR MUDANÇAS (REALTIME) ---
 function ouvirMudancas() {
     supabaseClient.channel('public:numeros')
         .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'numeros' }, (payload) => {
@@ -65,29 +47,18 @@ function ouvirMudancas() {
             const divNumero = document.querySelector(`.numero[data-id="${numeroAtualizado.id}"]`);
             if (divNumero) { 
                 divNumero.className = `numero ${numeroAtualizado.status}`; 
-                shoppingCart = shoppingCart.filter(id => id.toString() !== numeroAtualizado.id.toString());
-                
-                // *** CORREÇÃO AQUI (Limpador de Nome) ***
-                if (numeroAtualizado.status === 'vendido' && numeroAtualizado.Nome) { 
-                    const nomeCompleto = numeroAtualizado.Nome; // "Fulano de Tal 99991234"
-                    const splitIndex = nomeCompleto.lastIndexOf(' '); // Encontra o último espaço
-                    const nomeApenas = splitIndex > -1 ? nomeCompleto.substring(0, splitIndex) : nomeCompleto; 
-                    
-                    divNumero.title = `Comprado por: ${nomeApenas}`; // Mostra só "Fulano de Tal"
-                } else {
-                    divNumero.title = '';
-                }
+                shoppingCart = shoppingCart.filter(id => id !== numeroAtualizado.id);
             }
         })
         .subscribe();
 }
-
-// --- PASSO 6: LÓGICA DE CLIQUE NA GRELHA (CARRINHO) ---
+ 
 grelha.addEventListener('click', (e) => {
     const target = e.target; 
     if (target.classList.contains('numero') && target.classList.contains('disponivel')) {
         const id = target.dataset.id;
         const index = shoppingCart.indexOf(id);
+
         if (index > -1) { 
             shoppingCart.splice(index, 1);
             target.classList.remove('selecionado');
@@ -95,23 +66,33 @@ grelha.addEventListener('click', (e) => {
             shoppingCart.push(id);
             target.classList.add('selecionado');
         }
+        console.log('Carrinho:', shoppingCart);
     }
 });
-
-// --- PASSO 7: LÓGICA DO FORMULÁRIO (AGORA 100% MANUAL) ---
+ 
 formCheckout.addEventListener('submit', async (e) => {
     e.preventDefault();  
 
+    // 1. Validar o carrinho
     if (shoppingCart.length === 0) {
-        alert('Por favor, selecione pelo menos um número da grelha!');
+        alert('Por favor, selecione pelo menos um número da grade!');
         return;
     }
-
+ 
     const nome = document.getElementById('nome').value;
-    const whatsapp = document.getElementById('whatsapp').value;
+    const whatsapp = document.getElementById('whatsapp').value; 
     const isCrossSellActive = chkCrossSell.checked;
+ 
     const numerosString = shoppingCart.join(','); 
-
+ 
+    try { 
+        await fetch(`${N8N_RESERVAR_URL}?numeros=${numerosString}`);
+    } catch (err) {
+        console.error('Erro ao reservar:', err);
+        alert('Ops! Erro ao tentar reservar os números. Tente novamente.');
+        return;  
+    }
+ 
     let finalPrice = 0;
     let precoTexto = "";
     if (isCrossSellActive && shoppingCart.length === CROSS_SELL_COUNT) {
@@ -121,89 +102,102 @@ formCheckout.addEventListener('submit', async (e) => {
         finalPrice = shoppingCart.length * PRICE_PER_NUMBER;
         precoTexto = `R$ ${finalPrice.toFixed(2)} (${shoppingCart.length} x R$ 10,00)`;
     } 
-
     reciboNome.textContent = nome;
     reciboWhatsapp.textContent = whatsapp;
     reciboNumeros.textContent = numerosString;
     reciboValor.innerHTML = precoTexto;  
-
-    const texto = `Olá! Meu nome é ${nome} (WhatsApp: ${whatsapp}). Quero reservar os números [${numerosString}] pelo valor total de [${precoTexto}]. Vou enviar o comprovante.`;
+ 
+    const texto = `Olá! Meu nome é ${nome} (WhatsApp: ${whatsapp}). Acabei de reservar os números [${numerosString}] pelo valor total de [${precoTexto}]. Vou enviar o comprovante.`;
     const urlWhatsApp = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(texto)}`;
-
+ 
     btnWhatsapp.href = urlWhatsApp;
-    iniciarContadorOferta(300); // 5 minutos
-    modalRecibo.style.display = 'block'; // Mostra o modal
+    iniciarContadorOferta(300);
+    modalRecibo.style.display = 'block';
 });
 
-// --- PASSO 8: LÓGICA PARA FECHAR O MODAL ---
+let ofertaIntervalo;
+ 
 modalClose.onclick = function() {
     pararContadorOferta();
     modalRecibo.style.display = 'none'; 
     clearCart();
 }
-
+ 
 function clearCart() {
     shoppingCart = [];
     const selecionados = document.querySelectorAll('.numero.selecionado');
     selecionados.forEach(el => el.classList.remove('selecionado'));
 }
 
-// --- PASSO 9: FUNÇÕES DOS CONTADORES ---
 function iniciarContador() {
-    const dataSorteio = new Date("2025-11-16T18:00:00").getTime();
+    // IMPORTANTE: Defina a data exata do sorteio aqui (Ano, Mês, Dia, Hora)
+    // Os meses em JS vão de 0 (Jan) a 11 (Dez), então 10 = Novembro.
+    const dataSorteio = new Date("2025-11-16T18:00:00").getTime(); // 16 de Nov de 2025, às 18:00
+
     const contadorDiv = document.getElementById('contador');
     const grelhaContainer = document.getElementById('escolha-numeros');
     const dadosContainer = document.getElementById('preencher-dados');
 
+    // Atualiza o contador a cada 1 segundo
     const intervalo = setInterval(() => {
         const agora = new Date().getTime();
         const diferenca = dataSorteio - agora;
 
+        // Se o tempo acabou
         if (diferenca < 0) {
             clearInterval(intervalo);
             contadorDiv.innerHTML = "SORTEIO ENCERRADO!";
+            // Esconde a grelha e o formulário
             grelhaContainer.style.display = 'none';
             dadosContainer.style.display = 'none';
             return;
         }
 
+        // Cálculos de tempo
         const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
         const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
         const segundos = Math.floor((diferenca % (1000 * 60)) / 1000);
 
+        // Atualiza o HTML
+        // (usamos .padStart(2, '0') para garantir que sempre tenha 2 dígitos, ex: "09" em vez de "9")
         document.getElementById('dias').textContent = dias.toString().padStart(2, '0');
         document.getElementById('horas').textContent = horas.toString().padStart(2, '0');
         document.getElementById('minutos').textContent = minutos.toString().padStart(2, '0');
         document.getElementById('segundos').textContent = segundos.toString().padStart(2, '0');
+
     }, 1000);
 }
-
+ 
 function pararContadorOferta() {
     clearInterval(ofertaIntervalo);
 }
 
+// Função para INICIAR o contador da oferta
 function iniciarContadorOferta(duracaoEmSegundos) {
-    pararContadorOferta(); 
+    pararContadorOferta(); // Limpa qualquer timer antigo antes de começar
+
     let timer = duracaoEmSegundos;
     const contadorDisplay = document.getElementById('contador-oferta');
-    if (!contadorDisplay) return; 
-    contadorDisplay.textContent = "05:00";
-    document.getElementById('contador-oferta-container').innerHTML = `Sua oferta expira em: <span id="contador-oferta">05:00</span>`;
+
     ofertaIntervalo = setInterval(() => {
         let minutos = parseInt(timer / 60, 10);
         let segundos = parseInt(timer % 60, 10);
+
+        // Formata para "05:00"
         minutos = minutos < 10 ? "0" + minutos : minutos;
         segundos = segundos < 10 ? "0" + segundos : segundos;
+
         contadorDisplay.textContent = minutos + ":" + segundos;
+
         if (--timer < 0) {
             pararContadorOferta();
             document.getElementById('contador-oferta-container').innerHTML = "Sua oferta de desconto expirou!";
+            // Aqui você poderia, no futuro, desativar o checkbox de cross-sell
         }
     }, 1000);
 }
 
-// --- PASSO 10: INICIAR TUDO ---
 carregarGrelha(); 
 ouvirMudancas(); 
 iniciarContador();
